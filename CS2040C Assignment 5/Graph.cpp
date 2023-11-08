@@ -24,11 +24,11 @@ int negative(int value) {
 //print Path of sssp
 void printPath(int s, int d, int* pathArray) {
 	if (s == d) {
-		cout << s << " ";
+		cout << " " << s;
 	}
 	else {
 		printPath(s, pathArray[d], pathArray);
-		cout << d << " ";
+		cout << " " << d;
 	}
 }
 
@@ -55,21 +55,25 @@ int Graph::shortestDistance(int s, int d)
 	}
 
 	//set starting vertex estimated distance as 0
-	int curr = -1;
+	int currentNode = -1;
 	while (!pq.empty()) {
 		nodeWeightPair max = pq.extractMax();
-		curr = max.nodeIndex();
-		if (curr == d) {
+		currentNode = max.nodeIndex();
+		if (currentNode == d) {
 			break;
 		}
 		//update the neighbours
-		for (_al[curr].start(); !_al[curr].end(); _al[curr].next()) {
-			if (distArray[curr] + _al[curr].current().weight() < distArray[_al[curr].current().nodeIndex()]) {
-				pq.deleteItem(nodeWeightPair(_al[curr].current().nodeIndex(), negative(distArray[_al[curr].current().nodeIndex()])));
-				pathArray[_al[curr].current().nodeIndex()] = curr; //storing parent of node into pathArray
-				distArray[_al[curr].current().nodeIndex()] = distArray[curr] + _al[curr].current().weight();
-				nodeWeightPair smaller(_al[curr].current().nodeIndex(), negative(distArray[_al[curr].current().nodeIndex()]));
-				pq.insert(smaller);
+		for (_al[currentNode].start(); !_al[currentNode].end(); _al[currentNode].next()) {
+			int currNeighNode = _al[currentNode].current().nodeIndex();
+			int newDist = distArray[currentNode] + _al[currentNode].current().weight();
+			int neighDist = distArray[_al[currentNode].current().nodeIndex()];
+			//replace heap with node with new distance
+			if (newDist < neighDist) {
+				pq.deleteItem(nodeWeightPair(currNeighNode, negative(neighDist)));
+				pathArray[currNeighNode] = currentNode; //storing parent of node into pathArray
+				distArray[currNeighNode] = newDist;
+				nodeWeightPair newNeighNode(currNeighNode, negative(newDist));
+				pq.insert(newNeighNode);
 			}
 		}
 	}
@@ -80,7 +84,7 @@ int Graph::shortestDistance(int s, int d)
 		return -1;
 	}
 	//print Path
-	cout << "Path: ";
+	cout << "Path:";
 	printPath(s, d, pathArray);
 	cout << endl;
 
