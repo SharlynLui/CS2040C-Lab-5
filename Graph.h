@@ -13,11 +13,10 @@ public:
 	nodeWeightPair(const nodeWeightPair& nwp) { _node = nwp._node; _weight = nwp._weight; };
 	int nodeIndex() { return _node; };
 	int weight() { return _weight; };
-	bool operator>(const nodeWeightPair& nwp) { return _weight > nwp._weight;};
+	bool operator>(const nodeWeightPair& nwp) { return _weight > nwp._weight;}; //compare this node's weight with another
 	bool operator == (const nodeWeightPair& nwp) { return _node == nwp._node; };
 	friend ostream& operator<<(ostream&, const nodeWeightPair&);
 };
-
 
 class Graph {
 private:
